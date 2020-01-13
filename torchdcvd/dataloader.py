@@ -14,8 +14,8 @@ class VideoReaderPipeline(Pipeline):
 
 	Arguments:
 	------------------------------
-		.. file_root (str):
-				Video root directory which has been structured as standard labelled video dir
+		.. file_list (str):
+				Path to the split file with a list of pairs `videopath label`, seperated by white space.
 		.. batch_size (int):
 				Size of batches
 		.. sequence_length (int):
@@ -34,13 +34,13 @@ class VideoReaderPipeline(Pipeline):
 				Frame interval between each sequence (if `step` < 0, `step` is set to `sequence_length`).
 	"""
 
-	def __init__(self, file_root, batch_size, sequence_length, crop_size, 
+	def __init__(self, file_list, batch_size, sequence_length, crop_size, 
 				num_threads, device_id, random_shuffle=True, step=-1, stride=1, seed=42):
 		super().__init__(batch_size, num_threads, device_id, seed=seed)
 
 		# Define video reader
 		self.reader = ops.VideoReader(device = "gpu",
-										file_list = file_root,
+										file_list = file_list,
 										sequence_length = sequence_length,
 										normalized = False,
 										random_shuffle = random_shuffle,
@@ -70,8 +70,8 @@ class VideoLoader:
 
 	Arguments
 	-----------------------------
-		.. file_root (str):
-				Path to video root directory which has been structured as standard labelled video dir
+		.. file_list (str):
+				Path to the file with a list of pairs `file label`, seperated by white space.
 		.. batch_size (int):
 				Size of batches
 		.. sequence_length (int):
@@ -91,11 +91,11 @@ class VideoLoader:
 				(if `temp_stride` < 0, `temp_stride` is set to `sequence_length`).
 	"""
 
-	def __init__(self, file_root, batch_size, sequence_length, crop_size,
+	def __init__(self, file_list, batch_size, sequence_length, crop_size,
 				random_shuffle=True, epoch_size=-1, temp_stride=-1, seed=42):
 
 		# Define video reader pipeline
-		self.pipeline = VideoReaderPipeline(file_root, 
+		self.pipeline = VideoReaderPipeline(file_list, 
 											batch_size = batch_size,
 											sequence_length = sequence_length,
 											crop_size = crop_size,
