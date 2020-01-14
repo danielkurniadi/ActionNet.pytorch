@@ -114,7 +114,7 @@ class VideoLoader:
 
 		# Define DALI iterator
 		self.dali_iterator = DALIGenericIterator(self.pipeline,
-												output_map = ["data", "label"],
+												output_map = ["data", "labels"],
 												size = self.epoch_size,
 												auto_reset = True)
 
