@@ -66,11 +66,6 @@ def _dist_train(model, dataloaders, cfg):
     runner.register_training_hooks(cfg.lr_config, optimizer_config,
                                    cfg.checkpoint_config, cfg.log_config)
 
-    # register eval hooks
-    if cfg.data.val.type in ['RawFramesDataset', 'VideoDataset']:
-        runner.register_hook(
-            DistEvalTopKAccuracyHook(cfg.data.val, k=(1, 5)))
-
     # resume from epoch and/or load model checkpoint when available
     if cfg.resume_from:
         runner.resume(cfg.resume_from)
